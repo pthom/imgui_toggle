@@ -413,13 +413,7 @@ void ImGuiToggleRenderer::UpdatePalette()
         ImGui::UnionPalette(
             &_palette,
             *_value ? on_candidate : off_candidate,
-// [ADAPT_IMGUI_BUNDLE]
-#ifdef IMGUI_BUNDLE_PYTHON_API
-            _style->Colors.data(),
-#else
             _style->Colors,
-#endif
-// [/ADAPT_IMGUI_BUNDLE]
             *_value);
 
         // store specific colors that shouldn't blend.
@@ -431,15 +425,8 @@ void ImGuiToggleRenderer::UpdatePalette()
 
     ImGuiTogglePalette off_unioned;
     ImGuiTogglePalette on_unioned;
-// [ADAPT_IMGUI_BUNDLE]
-#ifdef IMGUI_BUNDLE_PYTHON_API
-    ImGui::UnionPalette(&off_unioned, off_candidate, _style->Colors.data(), false);
-    ImGui::UnionPalette(&on_unioned, on_candidate, _style->Colors.data(), true);
-#else
     ImGui::UnionPalette(&off_unioned, off_candidate, _style->Colors, false);
     ImGui::UnionPalette(&on_unioned, on_candidate, _style->Colors, true);
-#endif
-// [/ADAPT_IMGUI_BUNDLE]
 
     // otherwise, lets lerp them!
     ImGui::BlendPalettes(&_palette, off_unioned, on_unioned, _animationPercent);
