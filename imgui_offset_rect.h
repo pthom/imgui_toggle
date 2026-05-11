@@ -38,4 +38,14 @@ IM_MSVC_RUNTIME_CHECKS_OFF
 static inline ImOffsetRect operator+(const ImOffsetRect& lhs, const ImOffsetRect& rhs) { return ImOffsetRect(lhs.Top + rhs.Top, lhs.Left + rhs.Left, lhs.Bottom + rhs.Bottom, lhs.Right + rhs.Right); }
 static inline ImOffsetRect operator-(const ImOffsetRect& lhs, const ImOffsetRect& rhs) { return ImOffsetRect(lhs.Top - rhs.Top, lhs.Left - rhs.Left, lhs.Bottom - rhs.Bottom, lhs.Right - rhs.Right); }
 static inline ImOffsetRect operator*(const ImOffsetRect& lhs, const ImOffsetRect& rhs) { return ImOffsetRect(lhs.Top * rhs.Top, lhs.Left * rhs.Left, lhs.Bottom * rhs.Bottom, lhs.Right * rhs.Right); }
+// [Bundle] non-template ImLerp wins overload resolution over imgui's generic
+// `template<T> ImLerp(T, T, float)`, which requires `operator float()` on T.
+static inline ImOffsetRect ImLerp(const ImOffsetRect& a, const ImOffsetRect& b, float t)
+{
+    return ImOffsetRect(
+        a.Top    + (b.Top    - a.Top)    * t,
+        a.Left   + (b.Left   - a.Left)   * t,
+        a.Bottom + (b.Bottom - a.Bottom) * t,
+        a.Right  + (b.Right  - a.Right)  * t);
+}
 IM_MSVC_RUNTIME_CHECKS_RESTORE
